@@ -145,7 +145,7 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
           context,
           Icons.code,
           'GitHub',
-          'github.com/talha-developer',
+          'https://github.com/talhaDigitech',
           () => _launchUrl(AppConstants.github),
         ),
       ],
@@ -224,8 +224,14 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
 
   Future<void> _launchUrl(String urlString) async {
     final uri = Uri.parse(urlString);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        await launchUrl(uri);
+      }
+    } catch (e) {
+      debugPrint('Could not launch $urlString: $e');
     }
   }
 }

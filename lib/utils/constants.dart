@@ -16,8 +16,8 @@ class AppConstants {
       'I specialize in turning complex design prototypes into pixel-perfect interactive digital experiences, integrating Firebase/Supabase backends, REST APIs, and writing clean, maintainable code.';
 
   static const String email = 'talhaazeembaig@gmail.com';
-  static const String github = 'https://github.com/talha-developer';
-  static const String linkedin = 'www.linkedin.com/in/talha-azeem-baig';
+  static const String github = 'https://github.com/talhaDigitech';
+  static const String linkedin = 'https://www.linkedin.com/in/talha-azeem-baig';
   static const String cvUrl =
       'https://drive.google.com/file/d/1ln3xRDt6itNdHUm7ZRMcQe9wVf-qTNPC/view?usp=sharing'; // Placeholder
   static const String location = 'Karachi, Pakistan';

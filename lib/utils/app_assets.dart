@@ -10,4 +10,10 @@ class AppAssets {
   static const String healthsolution = 'assets/png/project2.png';
   static const String netVelocityApp = 'assets/png/project6.png';
   static const String naikefyWeb = 'assets/png/project5.png';
+  // svg icon
+  static const String dartSvg = 'assets/svg/dart.svg';
+  static const String flutterSvg = 'assets/svg/flutter.svg';
+  static const String firebaseSvg = 'assets/svg/firebase.svg';
+  static const String vsCodeSvg = 'assets/svg/vs-code.svg';
+  static const String githubSvg = 'assets/svg/github.svg';
 }

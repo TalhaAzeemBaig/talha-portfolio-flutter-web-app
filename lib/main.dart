@@ -30,5 +30,4 @@ class PortfolioApp extends ConsumerWidget {
       home: const PortfolioScreen(),
     );
   }
-
 }

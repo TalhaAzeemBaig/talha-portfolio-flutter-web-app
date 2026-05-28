@@ -1,5 +1,7 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:talha_portfolio/utils/app_assets.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -33,7 +35,7 @@ class HeroSection extends ConsumerWidget {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildAvatar(),
+                  const _AnimatedAvatar(),
                   const SizedBox(height: 40),
                   _buildContent(context, ref, isMobile),
                 ],
@@ -43,7 +45,7 @@ class HeroSection extends ConsumerWidget {
                 children: [
                   Expanded(child: _buildContent(context, ref, isMobile)),
                   const SizedBox(width: 60),
-                  _buildAvatar(),
+                  const _AnimatedAvatar(),
                 ],
               ),
       ),
@@ -141,49 +143,6 @@ class HeroSection extends ConsumerWidget {
     );
   }
 
-  Widget _buildAvatar() {
-    return Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: AppConstants.neonGradient,
-            boxShadow: [
-              BoxShadow(
-                color: AppConstants.neonBlue.withOpacity(0.5),
-                blurRadius: 30,
-                spreadRadius: 5,
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppConstants.darkBgColor, // Inner background
-              ),
-              child: const Center(
-                // child:
-                //  Icon(Icons.person, size: 150, color: Colors.white70),
-                // TODO: Replace with Image.network or AssetImage of Talha's real picture
-                child: CircleAvatar(
-                  radius: 140,
-                  backgroundImage: AssetImage(AppAssets.profileImage),
-                ),
-              ),
-            ),
-          ),
-        )
-        .animate(onPlay: (controller) => controller.repeat(reverse: true))
-        .moveY(
-          begin: -10,
-          end: 10,
-          duration: 3.seconds,
-          curve: Curves.easeInOut,
-        );
-  }
-
   Widget _buildCTAButton(
     BuildContext context,
     String text,
@@ -248,5 +207,172 @@ class HeroSection extends ConsumerWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     }
+  }
+}
+
+class _AnimatedAvatar extends StatefulWidget {
+  const _AnimatedAvatar();
+
+  @override
+  State<_AnimatedAvatar> createState() => _AnimatedAvatarState();
+}
+
+class _AnimatedAvatarState extends State<_AnimatedAvatar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 15),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const double orbitRadius = 170.0;
+    const double avatarSize = 300.0;
+    const double widgetSize = 400.0;
+
+    return SizedBox(
+      width: widgetSize,
+      height: widgetSize,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // The floating avatar
+          Container(
+                width: avatarSize,
+                height: avatarSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: AppConstants.neonGradient,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppConstants.neonBlue.withOpacity(0.5),
+                      blurRadius: 30,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppConstants.darkBgColor,
+                    ),
+                    child: const Center(
+                      child: CircleAvatar(
+                        radius: 140,
+                        backgroundImage: AssetImage(AppAssets.profileImage),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .animate(onPlay: (controller) => controller.repeat(reverse: true))
+              .moveY(
+                begin: -10,
+                end: 10,
+                duration: 3.seconds,
+                curve: Curves.easeInOut,
+              ),
+
+          // The orbiting icons
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  _buildOrbitIcon(
+                    svgAsset: AppAssets.dartSvg,
+                    color: const Color(0xFF0175C2),
+                    angle: _controller.value * 2 * math.pi,
+                    radius: orbitRadius,
+                    center: widgetSize / 2,
+                  ),
+                  _buildOrbitIcon(
+                    svgAsset: AppAssets.flutterSvg,
+                    color: const Color(0xFF02569B),
+                    angle: _controller.value * 2 * math.pi + (math.pi / 2),
+                    radius: orbitRadius,
+                    center: widgetSize / 2,
+                  ),
+
+                  _buildOrbitIcon(
+                    svgAsset: AppAssets.githubSvg,
+                    color: const Color(0xFF000000),
+                    angle: _controller.value * 2 * math.pi + math.pi,
+                    radius: orbitRadius,
+                    center: widgetSize / 2,
+                  ),
+
+                  _buildOrbitIcon(
+                    svgAsset: AppAssets.vsCodeSvg,
+                    color: const Color(0xFF007ACC),
+                    angle: _controller.value * 2 * math.pi + (3 * math.pi / 2),
+                    radius: orbitRadius,
+                    center: widgetSize / 2,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrbitIcon({
+    required String svgAsset,
+    required Color color,
+    required double angle,
+    required double radius,
+    required double center,
+  }) {
+    // 24 is half of container size (48/2)
+    final x = center + radius * math.cos(angle) - 24;
+    final y = center + radius * math.sin(angle) - 24;
+
+    return Positioned(
+      left: x,
+      top: y,
+      child: Container(
+        width: 48,
+        height: 48,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppConstants.darkCardColor,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.4),
+              blurRadius: 12,
+              spreadRadius: 2,
+            ),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: SvgPicture.asset(
+          svgAsset,
+          width: 24,
+          height: 24,
+          color: svgAsset == AppAssets.githubSvg ? Colors.white : null,
+        ),
+      ),
+    );
   }
 }
