@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Talha - Professional Flutter Developer Portfolio. Building high-performance, futuristic, and beautiful multi-platform applications.">
+  <meta name="keywords" content="Flutter, Developer, Portfolio, Dart, Riverpod, Mobile App, Web App, Talha">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Talha Portfolio">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Talha | Flutter Developer</title>
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Custom Loading Animation Styles -->
+  <style>
+    body {
+      background-color: #0A0E17; /* Dark background to match theme */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .loader {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      border-top-color: #00F2FE;
+      border-right-color: #9B51E0;
+      animation: spin 1s linear infinite, glow 2s ease-in-out infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 15px #00F2FE, 0 0 30px #9B51E0; }
+      50% { box-shadow: 0 0 30px #00F2FE, 0 0 60px #9B51E0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader Element -->
+  <div id="loader-container">
+    <div class="loader"></div>
+  </div>
+
+  <script>
+    // Hide the loader container once the first Flutter frame is painted
+    window.addEventListener('flutter-first-frame', function() {
+      var loader = document.getElementById('loader-container');
+      if (loader) {
+        loader.style.transition = 'opacity 0.5s ease-out';
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+      }
+    });
+  </script>
+
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
+
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
