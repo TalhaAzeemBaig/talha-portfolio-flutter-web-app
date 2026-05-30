@@ -15,7 +15,7 @@ class HeroSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = ResponsiveLayout.isMobile(context);
+    final useColumnLayout = !ResponsiveLayout.isDesktop(context);
     final size = MediaQuery.sizeOf(context);
 
     return VisibilityDetector(
@@ -30,20 +30,23 @@ class HeroSection extends ConsumerWidget {
         constraints: BoxConstraints(
           minHeight: size.height - 80, // Subtract navbar height
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-        child: isMobile
+        padding: EdgeInsets.symmetric(
+          horizontal: useColumnLayout ? 20 : 40,
+          vertical: useColumnLayout ? 40 : 60,
+        ),
+        child: useColumnLayout
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const _AnimatedAvatar(),
                   const SizedBox(height: 40),
-                  _buildContent(context, ref, isMobile),
+                  _buildContent(context, ref, useColumnLayout),
                 ],
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child: _buildContent(context, ref, isMobile)),
+                  Expanded(child: _buildContent(context, ref, useColumnLayout)),
                   const SizedBox(width: 60),
                   const _AnimatedAvatar(),
                 ],
@@ -52,28 +55,49 @@ class HeroSection extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, bool isMobile) {
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    bool useColumnLayout,
+  ) {
     final theme = Theme.of(context);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+
+    // Calculate dynamic scaling factor for fonts on smaller screens
+    final double fontScale = useColumnLayout
+        ? (screenWidth < 480 ? 0.75 : 0.85)
+        : 1.0;
+
     return Column(
-      crossAxisAlignment: isMobile
+      crossAxisAlignment: useColumnLayout
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           "Hi, I'm",
-          style: theme.textTheme.displaySmall,
+          style: theme.textTheme.displaySmall?.copyWith(
+            fontSize:
+                (theme.textTheme.displaySmall?.fontSize ?? 28) * fontScale,
+          ),
         ).animate().fade(duration: 600.ms).slideY(begin: 0.3, end: 0),
         const SizedBox(height: 10),
         Text(
               AppConstants.fullName,
               style: theme.textTheme.displayLarge?.copyWith(
+                fontSize:
+                    (theme.textTheme.displayLarge?.fontSize ?? 56) * fontScale,
                 foreground: Paint()
                   ..shader = AppConstants.heroTextGradient.createShader(
-                    const Rect.fromLTWH(0.0, 0.0, 400.0, 100.0),
+                    Rect.fromLTWH(
+                      0.0,
+                      0.0,
+                      useColumnLayout ? 300.0 : 400.0,
+                      100.0,
+                    ),
                   ),
               ),
-              textAlign: isMobile ? TextAlign.center : TextAlign.left,
+              textAlign: useColumnLayout ? TextAlign.center : TextAlign.left,
             )
             .animate()
             .fade(delay: 200.ms, duration: 600.ms)
@@ -81,8 +105,11 @@ class HeroSection extends ConsumerWidget {
         const SizedBox(height: 10),
         Text(
               AppConstants.title,
-              style: theme.textTheme.displayMedium,
-              textAlign: isMobile ? TextAlign.center : TextAlign.left,
+              style: theme.textTheme.displayMedium?.copyWith(
+                fontSize:
+                    (theme.textTheme.displayMedium?.fontSize ?? 40) * fontScale,
+              ),
+              textAlign: useColumnLayout ? TextAlign.center : TextAlign.left,
             )
             .animate()
             .fade(delay: 400.ms, duration: 600.ms)
@@ -91,14 +118,17 @@ class HeroSection extends ConsumerWidget {
         Text(
           AppConstants.tagline,
           style: theme.textTheme.titleLarge?.copyWith(
+            fontSize: (theme.textTheme.titleLarge?.fontSize ?? 22) * fontScale,
             color: theme.textTheme.bodyMedium?.color,
             fontWeight: FontWeight.normal,
           ),
-          textAlign: isMobile ? TextAlign.center : TextAlign.left,
+          textAlign: useColumnLayout ? TextAlign.center : TextAlign.left,
         ).animate().fade(delay: 600.ms, duration: 600.ms),
         const SizedBox(height: 40),
         Wrap(
-              alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+              alignment: useColumnLayout
+                  ? WrapAlignment.center
+                  : WrapAlignment.start,
               spacing: 20,
               runSpacing: 20,
               children: [
@@ -107,6 +137,7 @@ class HeroSection extends ConsumerWidget {
                   'Download CV',
                   Icons.download,
                   isPrimary: true,
+                  useColumnLayout: useColumnLayout,
                   onPressed: () => _launchUrl(AppConstants.cvUrl),
                 ),
                 _buildCTAButton(
@@ -114,6 +145,7 @@ class HeroSection extends ConsumerWidget {
                   'Contact Me',
                   Icons.mail,
                   isPrimary: false,
+                  useColumnLayout: useColumnLayout,
                   onPressed: () {
                     final pc = ref.read(portfolioControllerProvider);
                     pc.scrollToSection(pc.contactKey);
@@ -126,7 +158,9 @@ class HeroSection extends ConsumerWidget {
             .slideY(begin: 0.3, end: 0),
         const SizedBox(height: 40),
         Wrap(
-          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          alignment: useColumnLayout
+              ? WrapAlignment.center
+              : WrapAlignment.start,
           spacing: 20,
           runSpacing: 20,
           children: [
@@ -148,6 +182,7 @@ class HeroSection extends ConsumerWidget {
     String text,
     IconData icon, {
     required bool isPrimary,
+    required bool useColumnLayout,
     required VoidCallback onPressed,
   }) {
     final theme = Theme.of(context);
@@ -155,7 +190,7 @@ class HeroSection extends ConsumerWidget {
       onTap: onPressed,
       borderRadius: BorderRadius.circular(30),
       child: Container(
-        width: ResponsiveLayout.isMobile(context) ? null : 220,
+        width: useColumnLayout ? null : 220,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
@@ -165,6 +200,7 @@ class HeroSection extends ConsumerWidget {
               : Border.all(color: theme.primaryColor, width: 2),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
@@ -238,9 +274,16 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
 
   @override
   Widget build(BuildContext context) {
-    const double orbitRadius = 170.0;
-    const double avatarSize = 300.0;
-    const double widgetSize = 400.0;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final isMobile = ResponsiveLayout.isMobile(context);
+    final isTablet = ResponsiveLayout.isTablet(context);
+
+    final double widgetSize = isMobile
+        ? math.min(320.0, screenWidth - 40)
+        : (isTablet ? 360.0 : 400.0);
+    final double avatarSize = widgetSize * 0.75;
+    final double orbitRadius = widgetSize * 0.425;
+    final double iconSize = widgetSize * 0.12;
 
     return SizedBox(
       width: widgetSize,
@@ -258,22 +301,24 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                   boxShadow: [
                     BoxShadow(
                       color: AppConstants.neonBlue.withOpacity(0.5),
-                      blurRadius: 30,
-                      spreadRadius: 5,
+                      blurRadius: widgetSize * (30 / 400),
+                      spreadRadius: widgetSize * (5 / 400),
                     ),
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: EdgeInsets.all(widgetSize * (5 / 400)),
                   child: Container(
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppConstants.darkBgColor,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: CircleAvatar(
-                        radius: 140,
-                        backgroundImage: AssetImage(AppAssets.profileImage),
+                        radius: avatarSize / 2 - 10,
+                        backgroundImage: const AssetImage(
+                          AppAssets.profileImage,
+                        ),
                       ),
                     ),
                   ),
@@ -299,6 +344,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                     angle: _controller.value * 2 * math.pi,
                     radius: orbitRadius,
                     center: widgetSize / 2,
+                    iconSize: iconSize,
                   ),
                   _buildOrbitIcon(
                     svgAsset: AppAssets.flutterSvg,
@@ -306,6 +352,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                     angle: _controller.value * 2 * math.pi + (math.pi / 2),
                     radius: orbitRadius,
                     center: widgetSize / 2,
+                    iconSize: iconSize,
                   ),
 
                   _buildOrbitIcon(
@@ -314,6 +361,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                     angle: _controller.value * 2 * math.pi + math.pi,
                     radius: orbitRadius,
                     center: widgetSize / 2,
+                    iconSize: iconSize,
                   ),
 
                   _buildOrbitIcon(
@@ -322,6 +370,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                     angle: _controller.value * 2 * math.pi + (3 * math.pi / 2),
                     radius: orbitRadius,
                     center: widgetSize / 2,
+                    iconSize: iconSize,
                   ),
                 ],
               );
@@ -338,38 +387,39 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
     required double angle,
     required double radius,
     required double center,
+    required double iconSize,
   }) {
-    // 24 is half of container size (48/2)
-    final x = center + radius * math.cos(angle) - 24;
-    final y = center + radius * math.sin(angle) - 24;
+    final offset = iconSize / 2;
+    final x = center + radius * math.cos(angle) - offset;
+    final y = center + radius * math.sin(angle) - offset;
 
     return Positioned(
       left: x,
       top: y,
       child: Container(
-        width: 48,
-        height: 48,
-        padding: const EdgeInsets.all(10),
+        width: iconSize,
+        height: iconSize,
+        padding: EdgeInsets.all(iconSize * (10 / 48)),
         decoration: BoxDecoration(
           color: AppConstants.darkCardColor,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
               color: color.withOpacity(0.4),
-              blurRadius: 12,
-              spreadRadius: 2,
+              blurRadius: iconSize * (12 / 48),
+              spreadRadius: iconSize * (2 / 48),
             ),
             BoxShadow(
               color: Colors.black.withOpacity(0.5),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              blurRadius: iconSize * (10 / 48),
+              offset: Offset(0, iconSize * (4 / 48)),
             ),
           ],
         ),
         child: SvgPicture.asset(
           svgAsset,
-          width: 24,
-          height: 24,
+          width: iconSize * (24 / 48),
+          height: iconSize * (24 / 48),
           color: svgAsset == AppAssets.githubSvg ? Colors.white : null,
         ),
       ),
