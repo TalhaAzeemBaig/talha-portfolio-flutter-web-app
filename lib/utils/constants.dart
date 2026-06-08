@@ -19,7 +19,7 @@ class AppConstants {
   static const String github = 'https://github.com/talhaDigitech';
   static const String linkedin = 'https://www.linkedin.com/in/talha-azeem-baig';
   static const String cvUrl =
-      'https://drive.google.com/file/d/1ln3xRDt6itNdHUm7ZRMcQe9wVf-qTNPC/view?usp=sharing'; // Placeholder
+      'https://drive.google.com/file/d/1ddfLNJ6M6bXr5YpyNRdhoTjhOfnhXtSo/view?usp=sharing'; // Placeholder
   static const String location = 'Karachi, Pakistan';
 
   // Styling Tokens - Dark Mode
@@ -147,7 +147,7 @@ class AppConstants {
   static const List<Experience> experiences = [
     Experience(
       period: '2024 - Present',
-      role: 'Junior Flutter Developer',
+      role: 'Flutter Developer',
       company: 'Digitect Infra Associates',
       description:
           'Building and maintaining various applications for clients, implementing new features, optimizing performance, and fixing bugs.',
@@ -175,7 +175,7 @@ class AppConstants {
         'Responsive Design',
         'Notifications',
       ],
-      githubUrl: 'https://github.com/talha-developer/ecommerce_space',
+      githubUrl: '',
       liveUrl:
           'https://play.google.com/store/apps/details?id=com.naikify.digitech&pcampaignid=web_share',
       category: 'Mobile App',
@@ -193,7 +193,7 @@ class AppConstants {
         'WebSockets',
         'Clean Architecture',
       ],
-      githubUrl: 'https://github.com/talha-developer/glassmorphic_chat',
+      githubUrl: '',
       liveUrl:
           'https://play.google.com/store/apps/details?id=com.travelmalaysia.bolt&pcampaignid=web_share',
       category: 'Mobile App',
@@ -211,7 +211,7 @@ class AppConstants {
         "Notifications",
         "Flutter Secure Storage",
       ],
-      githubUrl: 'https://github.com/talha-developer/cyberguard_vpn',
+      githubUrl: '',
       liveUrl:
           'https://play.google.com/store/apps/details?id=com.app.event_link&pcampaignid=web_share',
       category: 'Mobile App',
@@ -219,7 +219,7 @@ class AppConstants {
 
     Project(
       id: '4',
-      title: 'Heath Solutiona',
+      title: 'Heath Solution',
       description:
           'A visual task dashboard with dragging boards, task lists, calendar synchronization, automatic notifications, and detailed productivity logs.',
       imageUrl: AppAssets.healthsolution,
@@ -230,8 +230,9 @@ class AppConstants {
         'Google Map',
         'Responsiveness',
       ],
-      githubUrl: 'https://github.com/talha-developer/quantum_tasks',
-      liveUrl: 'https://quantum-tasks.web.app',
+      githubUrl: '',
+      liveUrl:
+          'https://play.google.com/store/apps/details?id=com.healthSolutions&pcampaignid=web_share',
       category: 'Mobile App',
     ),
     Project(
@@ -247,8 +248,8 @@ class AppConstants {
         'Charts',
         'Web Responsiveness',
       ],
-      githubUrl: 'https://github.com/talha-developer/smart_city',
-      liveUrl: 'https://smart-city-dash.web.app',
+      githubUrl: '',
+      liveUrl: '',
       category: 'Web App',
     ),
     Project(
@@ -257,15 +258,9 @@ class AppConstants {
       description:
           'A network performance monitoring app that tracks real-time speed, latency, and data usage with historical analytics and alerts.',
       imageUrl: AppAssets.netVelocityApp,
-      technologies: [
-        'Flutter',
-        'Bloc',
-        'Firebase',
-        'Google Maps API',
-        'Push Notifications',
-      ],
-      githubUrl: 'https://github.com/talha-developer/hyper_delivery',
-      liveUrl: 'https://hyper-delivery.web.app',
+      technologies: ['Flutter', "Dart"],
+      githubUrl: '',
+      liveUrl: '',
       category: 'Mobile App',
     ),
   ];

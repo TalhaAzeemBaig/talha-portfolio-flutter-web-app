@@ -274,11 +274,11 @@ class _ProjectCardState extends State<_ProjectCard> {
                                 color: theme.textTheme.bodyMedium?.color
                                     ?.withOpacity(0.9),
                               ),
-                              maxLines: 4,
+                              maxLines: 10,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          // const SizedBox(height: 12),
                           // Technologies
                           Wrap(
                             spacing: 8,
@@ -310,28 +310,28 @@ class _ProjectCardState extends State<_ProjectCard> {
                           ),
                           const SizedBox(height: 24),
                           // Action Buttons
-                          if (widget.project.githubUrl.isNotEmpty &&
-                              widget.project.liveUrl.isNotEmpty)
-                            Row(
-                              children: [
-                                if (widget.project.liveUrl.isNotEmpty)
-                                  _buildHoverButton(
-                                    context,
-                                    Icons.link,
-                                    widget.project.liveUrl,
-                                    'Live Demo',
-                                  ),
-                                if (widget.project.githubUrl.isNotEmpty)
-                                  const SizedBox(width: 16),
-                                if (widget.project.githubUrl.isNotEmpty)
-                                  _buildHoverButton(
-                                    context,
-                                    Icons.code,
-                                    widget.project.githubUrl,
-                                    'Source Code',
-                                  ),
-                              ],
-                            ),
+                          // if (widget.project.githubUrl.isNotEmpty &&
+                          //     widget.project.liveUrl.isNotEmpty)
+                          Row(
+                            children: [
+                              if (widget.project.liveUrl.isNotEmpty)
+                                _buildHoverButton(
+                                  context,
+                                  Icons.link,
+                                  widget.project.liveUrl,
+                                  'Live Demo',
+                                ),
+                              if (widget.project.githubUrl.isNotEmpty)
+                                const SizedBox(width: 16),
+                              if (widget.project.githubUrl.isNotEmpty)
+                                _buildHoverButton(
+                                  context,
+                                  Icons.code,
+                                  widget.project.githubUrl,
+                                  'Source Code',
+                                ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

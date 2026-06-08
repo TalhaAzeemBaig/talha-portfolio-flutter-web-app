@@ -357,7 +357,7 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
 
                   _buildOrbitIcon(
                     svgAsset: AppAssets.githubSvg,
-                    color: const Color(0xFF000000),
+                    color: const Color(0xFF02569B),
                     angle: _controller.value * 2 * math.pi + math.pi,
                     radius: orbitRadius,
                     center: widgetSize / 2,
@@ -365,8 +365,10 @@ class _AnimatedAvatarState extends State<_AnimatedAvatar>
                   ),
 
                   _buildOrbitIcon(
-                    svgAsset: AppAssets.vsCodeSvg,
-                    color: const Color(0xFF007ACC),
+                    svgAsset: AppAssets.firebaseSvg,
+                    // orange
+                    // color: const Color(0xffff9408),
+                    color: const Color(0xFF02569B),
                     angle: _controller.value * 2 * math.pi + (3 * math.pi / 2),
                     radius: orbitRadius,
                     center: widgetSize / 2,
